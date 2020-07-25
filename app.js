@@ -71,9 +71,26 @@ app.route("/register")
 })
 .post(function(req, res){
 
+    // Passport Session on Register
+    User.register({username: req.body.username}, req.body.password, function(err, user){
+        if(err){
+            console.log(err);
+            res.redirect('/register');
+        }else{
+            passport.authenticate("local")(req, res, function(){
+                res.redirect("/secrets");
+            });
+        }
+    });
+});
 
-
-
+app.route("/secrets")
+.get(function(req,res){
+    if(req.isAuthenticated()){
+        res.render("secrets");
+    }else{
+        res.redirect("/login");
+    }
 });
 
 
