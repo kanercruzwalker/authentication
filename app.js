@@ -107,6 +107,12 @@ app.route("/secrets")
     }
 });
 
+app.route("/logout")
+.get(function(req,res){
+    req.logout();
+    res.redirect("/");
+});
+
 
 app.listen(3000, function() {
     console.log("Server started on port 3000");
