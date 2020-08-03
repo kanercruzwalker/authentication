@@ -38,7 +38,8 @@ mongoose.connect("mongodb://localhost:27017/userDB", {useNewUrlParser: true,useU
 const userSchema= new mongoose.Schema ({
     email: String,
     password: String,
-    googleId: String
+    googleId: String,
+    secret: String
 });
 
 // Enable passport-local-mongoose
@@ -151,7 +152,32 @@ app.get("/auth/google/secrets",
   function(req, res) {
     // Successful authentication, redirect home.
     res.redirect("/secrets");
-  });
+});
+// route to allow authenticated users to see submit page 
+app.get("/submit", function(req, res){
+    if(req.isAuthenticated()){
+        res.render("submit");
+    }else{
+        res.redirect("/login");
+    }
+});
+// route to save secret user types in
+app.post("/submit", function(req,res){
+    const submittedSecret = req.body.secret;
+    console.log(req.user);
+    User.findById(req.user.id, function(err, foundUser){
+        if (err) {
+            console.log(err);
+        } else{
+            if(foundUser){
+                foundUser.secret = submittedSecret;
+                foundUser.save(function(){
+                    res.redirect("/secrets");
+                });
+            }
+        }
+    });
+})
 
 
 app.listen(3000, function() {
