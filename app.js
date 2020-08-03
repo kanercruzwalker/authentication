@@ -131,11 +131,15 @@ app.route("/register")
 
 app.route("/secrets")
 .get(function(req,res){
-    if(req.isAuthenticated()){
-        res.render("secrets");
-    }else{
-        res.redirect("/login");
-    }
+    User.find({"secret":{$ne:null}}, function(err, foundUsers){
+        if (err) {
+            console.log(err);
+        } else {
+            if(foundUsers){
+                res.render("secrets", {usersWithSecrets: foundUsers});
+            }
+        }
+    });
 });
 
 app.route("/logout")
