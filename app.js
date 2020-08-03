@@ -37,7 +37,8 @@ mongoose.connect("mongodb://localhost:27017/userDB", {useNewUrlParser: true,useU
 // Schema
 const userSchema= new mongoose.Schema ({
     email: String,
-    password: String
+    password: String,
+    googleId: String
 });
 
 // Enable passport-local-mongoose
