@@ -132,6 +132,9 @@ app.route("/logout")
     res.redirect("/");
 });
 
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile'] }));
+
 
 app.listen(3000, function() {
     console.log("Server started on port 3000");
